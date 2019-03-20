@@ -9,12 +9,17 @@ use yii\web\Controller;
  */
 class BookController extends Controller
 {
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->layout = 'main';
+    }
+
     /**
      * 图书列表
      */
     public function actionIndex()
     {
-        $this->layout = false;
         return $this->render('index');
     }
 
@@ -23,7 +28,6 @@ class BookController extends Controller
      */
     public function actionSet()
     {
-        $this->layout = false;
         return $this->render('set');
     }
 
@@ -32,7 +36,6 @@ class BookController extends Controller
      */
     public function actionInfo()
     {
-        $this->layout = false;
         return $this->render('info');
     }
 
@@ -41,7 +44,6 @@ class BookController extends Controller
      */
     public function actionImages()
     {
-        $this->layout = false;
         return $this->render('images');
     }
 
@@ -50,7 +52,6 @@ class BookController extends Controller
      */
     public function actionCate()
     {
-        $this->layout = false;
         return $this->render('cate');
     }
 
@@ -59,7 +60,6 @@ class BookController extends Controller
      */
     public function actionCateSet()
     {
-        $this->layout = false;
         return $this->render('cate_set');
     }
 }

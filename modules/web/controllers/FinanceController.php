@@ -9,12 +9,16 @@ use yii\web\Controller;
  */
 class FinanceController extends Controller
 {
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->layout = 'main';
+    }
     /**
      * 订单列表
      */
     public function actionIndex()
     {
-        $this->layout=false;
         return $this->render('index');
     }
 
@@ -23,7 +27,6 @@ class FinanceController extends Controller
      */
     public function actionAccount()
     {
-        $this->layout=false;
         return $this->render('account');
     }
 
@@ -32,7 +35,6 @@ class FinanceController extends Controller
      */
     public function actionPayInfo()
     {
-        $this->layout=false;
         return $this->render('pay_info');
     }
 }

@@ -9,12 +9,17 @@ use yii\web\Controller;
  */
 class DashboardController extends Controller
 {
+    public function __construct($id, $module, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->layout = 'main';
+    }
+
     /**
      * 仪表盘显示
      */
     public function actionIndex()
     {
-        $this->layout=false;
         return $this->render('index');
     }
 }
