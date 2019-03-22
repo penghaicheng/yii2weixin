@@ -1,17 +1,11 @@
-<div class="row  border-bottom">
-    <div class="col-lg-12">
-        <div class="tab_title">
-            <ul class="nav nav-pills">
-                <li>
-                    <a href="/web/user/edit">信息编辑</a>
-                </li>
-                <li class="current">
-                    <a href="/web/user/reset-pwd">修改密码</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<?php
+use \app\common\services\StaticService;
+use \app\common\services\UtilService;
+StaticService::includeAppJsStatic("/js/web/user/reset_pwd.js",\app\assets\WebAsset::class);
+?>
+
+<?php echo \Yii::$app->view->renderFile("@app/modules/web/views/common/tab_user.php",['current' => 'pwd']);?>
+
 <div class="row m-t  user_reset_pwd_wrap">
     <div class="col-lg-12">
         <h2 class="text-center">修改密码</h2>
@@ -19,14 +13,14 @@
             <div class="form-group">
                 <label class="col-lg-2 control-label">账号:</label>
                 <div class="col-lg-10">
-                    <label class="control-label">编程浪子郭大爷</label>
+                    <label class="control-label"><?=UtilService::encode( $info['nickname'] );?></label>
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
             <div class="form-group">
                 <label class="col-lg-2 control-label">手机:</label>
                 <div class="col-lg-10">
-                    <label class="control-label">11012345679</label>
+                    <label class="control-label"><?=UtilService::encode( $info['mobile'] );?></label>
                 </div>
             </div>
             <div class="hr-line-dashed"></div>

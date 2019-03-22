@@ -13,12 +13,20 @@ class UtilService {
 		return  Html::encode($dispaly_text);
 	}
 
+    /**
+     * 获取ip
+     * @return string
+     */
 	public static function getIP(){
 		if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]))
 			return $_SERVER["HTTP_X_FORWARDED_FOR"];
 		return isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"]:'';
 	}
 
+    /**
+     * 判断是否为微信
+     * @return bool
+     */
 	public static  function isWechat(){
 		$ug= isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
 		if( stripos($ug,'micromessenger') !== false ){

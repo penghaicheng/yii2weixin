@@ -8,11 +8,12 @@
 
 namespace app\controllers;
 
+use app\common\components\BaseWebController;
+use app\common\services\applog\ApplogService;
 use yii\log\FileTarget;
-use yii\web\Controller;
 
 
-class ErrorController extends Controller
+class ErrorController extends BaseWebController
 {
     public function actionError()
     {
@@ -44,7 +45,7 @@ class ErrorController extends Controller
             $log->export();
 
             //todo 写入到数据库
-
+            ApplogService::addErrorLog(\Yii::$app->id, $err_msg);
             //return "错误信息：" . $message;
         }
 

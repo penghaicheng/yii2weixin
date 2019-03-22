@@ -1,3 +1,11 @@
+<?php
+
+use \app\assets\WebAsset;
+
+WebAsset::register($this);
+$upload_config = Yii::$app->params['upload'];
+?>
+<?php $this->beginPage(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,11 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>管理后台</title>
-    <link href="/css/web/bootstrap.min.css" rel="stylesheet">
-    <link href="/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="/css/web/style.css?ver=20170401" rel="stylesheet">
+    <?php $this->head(); ?>
 </head>
-
+<?php $this->beginBody(); ?>
 <body>
 <div id="wrapper">
     <nav class="navbar-default navbar-static-side" role="navigation">
@@ -116,5 +122,10 @@
         <?= $content ?>
     </div>
 </div>
+<div class="hidden_layout_warp hide">
+    <input type="hidden" name="upload_config" value='<?= json_encode($upload_config); ?>'/>
+</div>
 </body>
+<?php $this->endBody(); ?>
 </html>
+<?php $this->endPage(); ?>

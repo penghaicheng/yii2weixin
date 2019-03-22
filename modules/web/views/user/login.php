@@ -1,3 +1,9 @@
+<?php
+
+use \app\common\services\UrlService;
+
+?>
+
 <div class="loginColumns animated fadeInDown">
     <div class="row">
 
@@ -12,7 +18,7 @@
         </div>
         <div class="col-md-6">
             <div class="ibox-content">
-                <form class="m-t" role="form" action="http://book.imooc.test/web/user/login" method="post">
+                <form class="m-t" role="form" action="<?= UrlService::buildWebUrl('/user/login') ?>" method="post">
                     <div class="form-group text-center">
                         <h2 class="font-bold">登录</h2>
                     </div>
@@ -31,7 +37,7 @@
     <hr>
     <div class="row">
         <div class="col-md-6">
-            图书商城管理系统 <a href="http://www.54php.cn/" target="_blank"> 技术支持 </a>
+            图书商城管理系统 <a href="<?= UrlService::buildWebUrl('/') ?>" target="_blank"> 技术支持 </a>
         </div>
         <div class="col-md-6 text-right">
             <small>© 2017</small>

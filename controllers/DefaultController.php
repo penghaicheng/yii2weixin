@@ -8,14 +8,14 @@
 
 namespace app\controllers;
 
-use yii\web\Controller;
+use app\common\components\BaseWebController;
 
 
-class DefaultController extends Controller
+class DefaultController extends BaseWebController
 {
     public function actionIndex()
     {
-        $this->layout=false;
+        $this->layout='main';
         return $this->render('index');
     }
 }
