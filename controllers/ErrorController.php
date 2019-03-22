@@ -1,55 +1,66 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: derek
- * Date: 2019/3/19
- * Time: 15:18
- */
 
 namespace app\controllers;
 
+
 use app\common\components\BaseWebController;
 use app\common\services\applog\ApplogService;
+use Yii;
 use yii\log\FileTarget;
 
+class ErrorController extends BaseWebController {
 
-class ErrorController extends BaseWebController
-{
-    public function actionError()
-    {
-        $error = \Yii::$app->getErrorHandler()->exception;
+	public function actionError(){
+		$error = Yii::$app->errorHandler->exception;
+		$err_msg = "";
+		if ($error) {
+			$code = $error->getCode();
+			$msg = $error->getMessage();
+			$file = $error->getFile();
+			$line = $error->getLine();
 
-        if ($error) {
-            $file = $error->getFile();
-            $line = $error->getLine();
-            $message = $error->getMessage();
-            $code = $error->getCode();
+			$time = microtime(true);
+			$log = new FileTarget();
+			$log->logFile = Yii::$app->getRuntimePath() . '/logs/err.log';
 
-            $log = new FileTarget();
-            $log->logFile = \Yii::$app->getRuntimePath() . '/logs/error' . date('ymd', time()) . '.log';
+			$err_msg = $msg . " [file: {$file}][line: {$line}][err code:$code.]".
+				"[url:{$_SERVER['REQUEST_URI']}][post:".http_build_query($_POST)."]";
 
-            $err_msg = time() . PHP_EOL;
-            $err_msg .= $message . PHP_EOL;
-            $err_msg .= 'file:' . $file . PHP_EOL;
-            $err_msg .= 'line:' . $line . PHP_EOL;
-            $err_msg .= 'code:' . $code . PHP_EOL;
-            $err_msg .= 'url:' . $_SERVER['REQUEST_URL'] . PHP_EOL;
-            $err_msg .= 'postData:' . http_build_query($_POST) . PHP_EOL;
 
-            $log->messages[] = [
-                $err_msg,
-                1,
-                'application',
-                microtime(true),
-            ];
-            $log->export();
+			$log->messages[] = [
+				$err_msg,
+				1,
+				'application',
+				$time
+			];
+			$log->export();
+			ApplogService::addErrorLog(Yii::$app->id,$err_msg);
+		}
 
-            //todo 写入到数据库
-            ApplogService::addErrorLog(\Yii::$app->id, $err_msg);
-            //return "错误信息：" . $message;
-        }
+		return $this->render("error",[
+			"err_msg" => $err_msg
+		]);
+	}
 
-        $this->layout = false;
-        return $this->render('error', ['err_msg' => $message]);
-    }
+	public function actionCapture(){
+		$yii_cookies = [];
+		$cookies = Yii::$app->request->cookies;
+		foreach( $_COOKIE as $_c_key => $_c_val ){
+			$yii_cookies[] = $_c_key.":".$cookies->get($_c_key);
+		}
+
+		$referer = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+		$ua = isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:'';
+		$url = $this->post("url","");
+		$message = $this->post("message","");
+		$error = $this->post("error","");
+		$err_msg = "JS ERROR：[url:{$referer}],[ua:{$ua}],[js_file:{$url}],[error:{$message}],[error_info:{$error}]";
+
+		if( !$url ){
+			$err_msg .= ",[cookie:{".implode(";",$yii_cookies)."}]";
+		}
+
+		ApplogService::addErrorLog("app-js",$err_msg);
+	}
+
 }

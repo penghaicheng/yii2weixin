@@ -1,19 +1,16 @@
-<div class="row  border-bottom">
-    <div class="col-lg-12">
-        <div class="tab_title">
-            <ul class="nav nav-pills">
-                <li class="current">
-                    <a href="/web/qrcode/index">渠道二维码</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<?php
+use \app\common\services\UrlService;
+use \app\common\services\UtilService;
+use \app\common\services\StaticService;
+?>
+
+<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_qrcode.php",[ 'current' => 'index' ]);?>
+
 <div class="row">
-    <div class="col-lg-12">
+	<div class="col-lg-12">
         <div class="row m-t">
             <div class="col-lg-12">
-                <a class="btn btn-w-m btn-outline btn-primary pull-right" href="/web/qrcode/set">
+                <a class="btn btn-w-m btn-outline btn-primary pull-right" href="<?=UrlService::buildWebUrl("/qrcode/set");?>">
                     <i class="fa fa-plus"></i>二维码
                 </a>
             </div>
@@ -29,44 +26,32 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>慕课渠道</td>
-                <td>
-                    <img style="width: 100px;height: 100px;"
-                         src="/default/qrcode?qr_code_url=http%3A%2F%2Fweixin.qq.com%2Fq%2F02Ips51CZLc0j1U6wzho1J"/>
-                </td>
-                <td>2</td>
-                <td>0</td>
-                <td>
-                    <a class="m-l" href="/web/qrcode/set?id=2">
-                        <i class="fa fa-edit fa-lg"></i>
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td>测试渠道二维码</td>
-                <td>
-                    <img style="width: 100px;height: 100px;"
-                         src="/default/qrcode?qr_code_url=http%3A%2F%2Fweixin.qq.com%2Fq%2F028oCk0dZLc0j1I3uWho1L"/>
-                </td>
-                <td>0</td>
-                <td>0</td>
-                <td>
-                    <a class="m-l" href="/web/qrcode/set?id=1">
-                        <i class="fa fa-edit fa-lg"></i>
-                    </a>
-                </td>
-            </tr>
+            <?php if( $list ):?>
+                <?php foreach( $list as $_item ):?>
+                <tr>
+                    <td><?=UtilService::encode( $_item['name'] );?></td>
+                    <td>
+                        <img style="width: 100px;height: 100px;" src="<?=UrlService::buildWwwUrl( "/default/qrcode",[ 'qr_code_url' => $_item['qrcode'] ] );?>"/>
+                    </td>
+                    <td><?=UtilService::encode( $_item['total_scan_count'] );?></td>
+                    <td><?=UtilService::encode( $_item['total_reg_count'] );?></td>
+                    <td>
+                        <a class="m-l" href="<?=UrlService::buildWebUrl("/qrcode/set",[ 'id' => $_item['id'] ]);?>">
+                            <i class="fa fa-edit fa-lg"></i>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach;?>
+            <?php else:?>
+                <tr><td colspan="5">暂无数据</td></tr>
+            <?php endif;?>
             </tbody>
         </table>
-        <div class="row">
-            <div class="col-lg-12">
-                <span class="pagination_count" style="line-height: 40px;">共2条记录 | 每页50条</span>
-                <ul class="pagination pagination-lg pull-right" style="margin: 0 0 ;">
-                    <li class="active"><a href="javascript:void(0);">1</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+		<?php echo \Yii::$app->view->renderFile("@app/modules/web/views/common/pagination.php", [
+		        'pages' => $pages,
+				'url' => '/qrcode/index',
+				'search_conditions' => [],
+        ]); ?>
+	</div>
 </div>
 

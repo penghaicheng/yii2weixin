@@ -1,3 +1,16 @@
+<?php
+use \app\common\services\UrlService;
+use \app\common\services\StaticService;
+StaticService::includeAppJsStatic( "/plugins/highcharts/highcharts.js",\app\assets\WebAsset::className() );
+
+StaticService::includeAppCssStatic( "/plugins/datetimepicker/jquery.datetimepicker.min.css",\app\assets\WebAsset::className() );
+
+StaticService::includeAppJsStatic( "/plugins/datetimepicker/jquery.datetimepicker.full.min.js",\app\assets\WebAsset::className() );
+
+
+StaticService::includeAppJsStatic( "/js/web/chart.js",\app\assets\WebAsset::className() );
+StaticService::includeAppJsStatic( "/js/web/dashboard/index.js",\app\assets\WebAsset::className() );
+?>
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-3">
@@ -7,8 +20,8 @@
                     <h5>营收概况</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">0.00</h1>
-                    <small>近30日：7029.00</small>
+                    <h1 class="no-margins"><?=sprintf("%.2f",$data['finance']['today']);?></h1>
+                    <small>近30日：<?=sprintf("%.2f",$data['finance']['month']);?></small>
                 </div>
             </div>
         </div>
@@ -19,8 +32,8 @@
                     <h5>订单</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">0</h1>
-                    <small>近30日：6664</small>
+                    <h1 class="no-margins"><?=$data['order']['today'];?></h1>
+                    <small>近30日：<?=$data['order']['month'];?></small>
                 </div>
             </div>
         </div>
@@ -31,9 +44,9 @@
                     <h5>会员</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">73</h1>
-                    <small>今日新增：0</small>
-                    <small>近30日新增：549</small>
+                    <h1 class="no-margins"><?=$data['member']['total'];?></h1>
+                    <small>今日新增：<?=$data['member']['today_new'];?></small>
+                    <small>近30日新增：<?=$data['member']['month_new'];?></small>
                 </div>
             </div>
         </div>
@@ -44,8 +57,8 @@
                     <h5>分享</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">0</h1>
-                    <small>近30日：10826</small>
+                    <h1 class="no-margins"><?=$data['shared']['today'];?></h1>
+                    <small>近30日：<?=$data['shared']['month'];?></small>
                 </div>
             </div>
         </div>
@@ -59,4 +72,3 @@
         </div>
     </div>
 </div>
-

@@ -3,6 +3,13 @@ namespace app\common\services\oauth;
 use app\common\components\HttpClient;
 
 class WeixinService extends  ClientBase {
+
+    /**
+     * 微信登录
+     * @param string $scope
+     * @param string $state
+     * @return string
+     */
 	public function Login( $scope = '', $state = '' ){
 		$url = "https://open.weixin.qq.com/connect/oauth2/authorize";
 		$config_params = \Yii::$app->params;

@@ -15,5 +15,11 @@ return [
         'avatar' => '/uploads/avatar',
         'brand' => '/uploads/brand',
         'book' => '/uploads/book',
-    ]
+    ],
+    'weixin'=>[
+        'appid'=>'wxb90267874ee90c50',
+        'sk'=>'eeced978d1aebd1af8a79ac1080f7e43',
+        'token'=>'derek',
+        'aeskey'=>''
+    ],
 ];

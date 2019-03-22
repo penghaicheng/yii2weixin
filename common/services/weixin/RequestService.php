@@ -5,8 +5,11 @@ use app\models\oauth\OauthAccessToken;
 use \app\common\services\BaseService;
 
 class RequestService extends  BaseService {
+
 	private  static $app_token = "";
+
 	private  static $appid = "";
+
 	private  static $app_secret = "";
 
 	private static $url = "https://api.weixin.qq.com/cgi-bin/";
@@ -32,6 +35,13 @@ class RequestService extends  BaseService {
 		return $res['access_token'];
 	}
 
+    /**
+     * 发起请求
+     * @param $path
+     * @param array $data
+     * @param string $method
+     * @return bool|mixed
+     */
 	public static function send($path,$data=[],$method = "GET"){
 
 		$request_url = self::$url.$path;

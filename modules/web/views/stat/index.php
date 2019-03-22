@@ -1,23 +1,18 @@
-<div class="row  border-bottom">
-    <div class="col-lg-12">
-        <div class="tab_title">
-            <ul class="nav nav-pills">
-                <li class="current">
-                    <a href="/web/stat/index">财务统计</a>
-                </li>
-                <li>
-                    <a href="/web/stat/product">商品售卖</a>
-                </li>
-                <li>
-                    <a href="/web/stat/member">会员消费统计</a>
-                </li>
-                <li>
-                    <a href="/web/stat/share">分享统计</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<?php
+use \app\common\services\UrlService;
+use \app\common\services\StaticService;
+StaticService::includeAppJsStatic( "/plugins/highcharts/highcharts.js",\app\assets\WebAsset::className() );
+
+StaticService::includeAppCssStatic( "/plugins/datetimepicker/jquery.datetimepicker.min.css",\app\assets\WebAsset::className() );
+
+StaticService::includeAppJsStatic( "/plugins/datetimepicker/jquery.datetimepicker.full.min.js",\app\assets\WebAsset::className() );
+
+
+StaticService::includeAppJsStatic( "/js/web/chart.js",\app\assets\WebAsset::className() );
+StaticService::includeAppJsStatic( "/js/web/stat/index.js",\app\assets\WebAsset::className() );
+?>
+
+<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_stat.php",[ 'current' => 'index' ]);?>
 <div class="row m-t">
     <div class="col-lg-12" id="container" style="height: 400px;">
 
@@ -27,8 +22,7 @@
             <div class="row p-w-m">
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" placeholder="请选择开始时间" name="date_from" class="form-control"
-                               value="2017-03-10">
+                        <input type="text" placeholder="请选择开始时间" name="date_from" class="form-control"  value="<?=$search_conditions['date_from'];?>">
                     </div>
                 </div>
                 <div class="form-group m-r m-l">
@@ -36,8 +30,7 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" placeholder="请选择结束时间" name="date_to" class="form-control"
-                               value="2017-04-09">
+                        <input type="text" placeholder="请选择结束时间" name="date_to" class="form-control" value="<?=$search_conditions['date_to'];?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -54,43 +47,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>2017-03-16</td>
-                <td>1003.00</td>
-            </tr>
-            <tr>
-                <td>2017-03-15</td>
-                <td>1007.00</td>
-            </tr>
-            <tr>
-                <td>2017-03-14</td>
-                <td>1005.00</td>
-            </tr>
-            <tr>
-                <td>2017-03-13</td>
-                <td>1003.00</td>
-            </tr>
-            <tr>
-                <td>2017-03-12</td>
-                <td>1003.00</td>
-            </tr>
-            <tr>
-                <td>2017-03-11</td>
-                <td>1002.00</td>
-            </tr>
-            <tr>
-                <td>2017-03-10</td>
-                <td>1006.00</td>
-            </tr>
+                <?php if( $list ):?>
+                    <?php foreach( $list as $_item ):?>
+                        <tr>
+                            <td><?=$_item['date'];?></td>
+                            <td><?=$_item['total_pay_money'];?></td>
+                        </tr>
+                    <?php endforeach;?>
+                <?php else:?>
+                    <tr> <td colspan="2">暂无数据</td> </tr>
+                <?php endif;?>
             </tbody>
         </table>
-        <div class="row">
-            <div class="col-lg-12">
-                <span class="pagination_count" style="line-height: 40px;">共7条记录 | 每页50条</span>
-                <ul class="pagination pagination-lg pull-right" style="margin: 0 0 ;">
-                    <li class="active"><a href="javascript:void(0);">1</a></li>
-                </ul>
-            </div>
-        </div>
+		<?php echo \Yii::$app->view->renderFile("@app/modules/web/views/common/pagination.php", [
+			'pages' => $pages,
+			'url' => '/stat/index',
+			'search_conditions' => $search_conditions,
+		]); ?>
     </div>
 </div>

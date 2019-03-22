@@ -1,40 +1,30 @@
-<div class="row  border-bottom">
-    <div class="col-lg-12">
-        <div class="tab_title">
-            <ul class="nav nav-pills">
-                <li class="current">
-                    <a href="/web/member/index">会员列表</a>
-                </li>
-                <li>
-                    <a href="/web/member/comment">会员评论</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+<?php
+use \app\common\services\UrlService;
+use \app\common\services\UtilService;
+use \app\common\services\ConstantMapService;
+?>
+<?php echo Yii::$app->view->renderFile("@app/modules/web/views/common/tab_member.php",[ 'current' => 'index' ]);?>
 <div class="row m-t">
-    <div class="col-lg-12">
+	<div class="col-lg-12">
         <div class="row">
             <div class="col-lg-12">
                 <div class="m-b-md">
-                    <a class="btn btn-outline btn-primary pull-right" href="/web/member/set?id=1">编辑</a>
+					<?php if( $info && $info['status']):?>
+                    <a class="btn btn-outline btn-primary pull-right" href="<?=UrlService::buildWebUrl("/member/set",[ 'id' => $info['id'] ]);?>">编辑</a>
+					<?php endif;?>
                     <h2>会员信息</h2>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-2 text-center">
-                <img class="img-circle" src="/uploads/avatar/20170313/159419a875565b1afddd541fa34c9e65.jpg"
-                     width="100px" height="100px"/>
+                <img class="img-circle" src="<?=UrlService::buildPicUrl( "avatar",$info['avatar'] );?>" width="100px" height="100px"/>
             </div>
             <div class="col-lg-9">
                 <dl class="dl-horizontal">
-                    <dt>姓名：</dt>
-                    <dd>郭威</dd>
-                    <dt>手机：</dt>
-                    <dd>12312312312</dd>
-                    <dt>性别：</dt>
-                    <dd>未填写</dd>
+                    <dt>姓名：</dt> <dd><?=UtilService::encode( $info['nickname'] );?></dd>
+                    <dt>手机：</dt> <dd><?=UtilService::encode( $info['mobile'] );?></dd>
+                    <dt>性别：</dt> <dd><?=ConstantMapService::$sex_mapping[ $info['sex'] ];?></dd>
                 </dl>
             </div>
         </div>
@@ -67,61 +57,28 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            20170312194531
-                                        </td>
-                                        <td>
-                                            2017-03-12 22:28
-                                        </td>
-                                        <td>
-                                            135.00
-                                        </td>
-                                        <td>
-                                            已支付
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            20170312194530
-                                        </td>
-                                        <td>
-                                            2017-03-12 22:28
-                                        </td>
-                                        <td>
-                                            135.00
-                                        </td>
-                                        <td>
-                                            已支付
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            20170312194429
-                                        </td>
-                                        <td>
-                                        </td>
-                                        <td>
-                                            90.00
-                                        </td>
-                                        <td>
-                                            待支付
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            20170312152428
-                                        </td>
-                                        <td>
-                                            2017-03-12 15:51
-                                        </td>
-                                        <td>
-                                            88.88
-                                        </td>
-                                        <td>
-                                            已支付
-                                        </td>
-                                    </tr>
+                                    <?php if( $pay_order_list ):?>
+                                        <?php foreach( $pay_order_list as $_pay_order_info ):?>
+                                        <tr>
+                                            <td>
+                                               <?=date("YmdHi",strtotime( $_pay_order_info['created_time'] ) ).$_pay_order_info['id'];?>
+                                            </td>
+                                            <td>
+                                                <?php if( $_pay_order_info['status'] == 1 ):?>
+                                                <?=date("Y-m-d H:i",strtotime( $_pay_order_info['pay_time'] ) );?>
+                                                <?php endif;?>
+                                            </td>
+                                            <td>
+                                                <?=$_pay_order_info['pay_price'];?>
+                                            </td>
+                                            <td>
+												<?=ConstantMapService::$pay_status_mapping[ $_pay_order_info['status'] ];?>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach;?>
+                                    <?php else:?>
+                                        <tr><td colspan="4">暂无订单</td></tr>
+                                    <?php endif;?>
                                     </tbody>
                                 </table>
                             </div>
@@ -136,42 +93,21 @@
                                     </thead>
                                     <tbody>
                                     <tr>
+                                        <?php if( $comments_list ):?>
+                                            <?php foreach( $comments_list as $_item_comment ):?>
                                         <td>
-                                            2017-03-17 16:48:31
+                                            <?=$_item_comment['created_time'];?>
                                         </td>
+                                                <td>
+													<?=$_item_comment['score'];?>
+                                                </td>
                                         <td>
-                                            8
+											<?=UtilService::encode( $_item_comment['content'] );?>
                                         </td>
-                                        <td>
-                                            哈哈哈哈或哈哈或
-                                        </td>
-                                        <td>
-                                            2017-03-17 16:41:11
-                                        </td>
-                                        <td>
-                                            6
-                                        </td>
-                                        <td>
-                                            书是正品的，非常不错的
-                                        </td>
-                                        <td>
-                                            2017-03-17 16:41:16
-                                        </td>
-                                        <td>
-                                            8
-                                        </td>
-                                        <td>
-                                            书是正品的，非常不错的
-                                        </td>
-                                        <td>
-                                            2017-03-17 16:41:17
-                                        </td>
-                                        <td>
-                                            10
-                                        </td>
-                                        <td>
-                                            服务非常好
-                                        </td>
+                                                <?php endforeach;?>
+                                        <?php else:?>
+                                    <tr><td colspan="3">暂无评论</td></tr>
+                                        <?php endif;?>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -181,6 +117,5 @@
                 </div>
             </div>
         </div>
-    </div>
+	</div>
 </div>
-
